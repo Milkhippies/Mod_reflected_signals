@@ -18,9 +18,9 @@ namespace TestApp
     public partial class Form1 : Form
     {
         Int64 f0;
-        double[] Hn = new double[500000];
-        Int16[] Hwav = new Int16[500000];
-        byte[] HByte = new byte[50000];
+        double[] Hn = new double[300000];
+        Int16[] Hwav = new Int16[300000];
+        byte[] HByte = new byte[10000];
         double f1tt, vtt, v1tt, Hmax, Hmin;
         double w1t, w2t;
         double sras, sAuto, sWindows, sWheel, sLights;
@@ -150,7 +150,7 @@ namespace TestApp
             Hmax = 0;
             Hmin = 0;
 
-            for (int i = 0; i < 500000; i++)
+            for (int i = 0; i < 300000; i++)
             {
                 Hn[i] = Y(Td * i);
                 if (Hn[i] > Hmax)
@@ -159,7 +159,7 @@ namespace TestApp
                 }
             }
 
-            for (int i = 0; i < 500000; i++)
+            for (int i = 0; i < 300000; i++)
             {
                 // Hwav[i] = (int)(((Hn[i]- Hmin) / (Hmax - Hmin)) * 255)*100;
                  Hwav[i] = Convert.ToInt16((Hn[i]/Hmax)*30000);
@@ -191,21 +191,25 @@ namespace TestApp
             BinaryWriter wr = new BinaryWriter(fi);
 
             wr.Write(0x46464952); // riff
-            wr.Write(0x000F4266); // chunk size
+            wr.Write(0x0007876A); // chunk size *** 0x000F4266
             wr.Write(0x45564157); // wave
             wr.Write(0x20746D66); // fmt 
             wr.Write(0x00000012); // subchunksize
-            wr.Write(0x00010001); // audioformat
-            wr.Write(0x0000AC44); // Channels
-            wr.Write(0x00015888); // Sample rate
-            wr.Write(0x00100002); // Average bytes per second
-            wr.Write(0x61640000); // da
-            wr.Write(0x42406174); // ta 42 и 0F
-            wr.Write(0x0000000F);
+            wr.Write(0x00020001); // audioformat каналы 0x00010001
+            wr.Write(0x00001F40); // Channels 0x0000AC44
+            wr.Write(0x00007D00); // Sample rate 0x00015888
+            wr.Write(0x00100004); // Average bytes per second 0x00100002
+            wr.Write(0x61660000); // extra
+            wr.Write(0x00047463); // extra
+            wr.Write(0xE1CE0000); // extra
+            wr.Write(0x61640001); // da
+            wr.Write(0x87386174); // ta 42 и 0F 0x42406174
+            wr.Write(0x01540007); // 0x0000000F
+           // wr.Write(0x01580D30);
             //wr.Write(0x07F903FD);
 
 
-            for (int i = 0; i < 500000; i+=1)
+            for (int i = 0; i < 300000; i+=1)
                {
                  wr.Write(Hwav[i]);
             }
