@@ -48,7 +48,6 @@
             this.label7 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.chart1 = new System.Windows.Forms.DataVisualization.Charting.Chart();
-            this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.textBox7 = new System.Windows.Forms.TextBox();
             this.label8 = new System.Windows.Forms.Label();
             this.textBox8 = new System.Windows.Forms.TextBox();
@@ -69,8 +68,6 @@
             this.label16 = new System.Windows.Forms.Label();
             this.textBox16 = new System.Windows.Forms.TextBox();
             this.label17 = new System.Windows.Forms.Label();
-            this.textBox17 = new System.Windows.Forms.TextBox();
-            this.label18 = new System.Windows.Forms.Label();
             this.textBox18 = new System.Windows.Forms.TextBox();
             this.label21 = new System.Windows.Forms.Label();
             this.checkBox2 = new System.Windows.Forms.CheckBox();
@@ -80,7 +77,6 @@
             this.label6 = new System.Windows.Forms.Label();
             this.button2 = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.chart1)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.chart2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.chart3)).BeginInit();
             this.SuspendLayout();
@@ -170,14 +166,6 @@
             series1.MarkerSize = 10;
             series1.Name = "Series1";
             this.chart1.Series.Add(series1);
-            // 
-            // pictureBox1
-            // 
-            this.pictureBox1.Cursor = System.Windows.Forms.Cursors.PanSW;
-            resources.ApplyResources(this.pictureBox1, "pictureBox1");
-            this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.TabStop = false;
-            this.pictureBox1.Click += new System.EventHandler(this.pictureBox1_Click);
             // 
             // textBox7
             // 
@@ -289,17 +277,6 @@
             resources.ApplyResources(this.label17, "label17");
             this.label17.Name = "label17";
             // 
-            // textBox17
-            // 
-            resources.ApplyResources(this.textBox17, "textBox17");
-            this.textBox17.Name = "textBox17";
-            this.textBox17.TextChanged += new System.EventHandler(this.textBox17_TextChanged);
-            // 
-            // label18
-            // 
-            resources.ApplyResources(this.label18, "label18");
-            this.label18.Name = "label18";
-            // 
             // textBox18
             // 
             resources.ApplyResources(this.textBox18, "textBox18");
@@ -380,8 +357,6 @@
             this.Controls.Add(this.checkBox2);
             this.Controls.Add(this.textBox18);
             this.Controls.Add(this.label21);
-            this.Controls.Add(this.textBox17);
-            this.Controls.Add(this.label18);
             this.Controls.Add(this.textBox16);
             this.Controls.Add(this.label17);
             this.Controls.Add(this.textBox15);
@@ -402,7 +377,6 @@
             this.Controls.Add(this.label9);
             this.Controls.Add(this.textBox7);
             this.Controls.Add(this.label8);
-            this.Controls.Add(this.pictureBox1);
             this.Controls.Add(this.chart1);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.label7);
@@ -416,9 +390,9 @@
             this.Controls.Add(this.label3);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.button1);
+            this.Cursor = System.Windows.Forms.Cursors.Arrow;
             this.Name = "Form1";
             ((System.ComponentModel.ISupportInitialize)(this.chart1)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.chart2)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.chart3)).EndInit();
             this.ResumeLayout(false);
@@ -439,7 +413,6 @@
         private System.Windows.Forms.TextBox textBox4;
         private System.Windows.Forms.TextBox textBox5;
         private System.Windows.Forms.DataVisualization.Charting.Chart chart1;
-        private System.Windows.Forms.PictureBox pictureBox1;
         private System.Windows.Forms.TextBox textBox7;
         private System.Windows.Forms.Label label8;
         private System.Windows.Forms.TextBox textBox8;
@@ -461,8 +434,6 @@
         private System.Windows.Forms.Label label16;
         private System.Windows.Forms.TextBox textBox16;
         private System.Windows.Forms.Label label17;
-        private System.Windows.Forms.TextBox textBox17;
-        private System.Windows.Forms.Label label18;
         private System.Windows.Forms.TextBox textBox18;
         private System.Windows.Forms.Label label21;
         private System.Windows.Forms.CheckBox checkBox2;

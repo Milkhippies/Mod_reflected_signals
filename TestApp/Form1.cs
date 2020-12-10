@@ -1,16 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
 using System.IO;
-using System.Linq;
-using System.Security.Cryptography.X509Certificates;
-using System.Text;
-using System.Threading.Tasks;
-//using NAudio;
-//using NAudio.Wave;
-//using NAudio.Wave.SampleProviders;
 using System.Windows.Forms;
 
 namespace TestApp
@@ -18,40 +7,34 @@ namespace TestApp
     public partial class Form1 : Form
     {
         Int64 f0;
+        int Number = 500000;
         double[] Hn = new double[500000];
         Int16[] Hwav = new Int16[500000];
-        byte[] HByte = new byte[50000];
-        double f1tt, vtt, v1tt, Hmax, Hmin;
-        double w1t, w2t;
+        double Hmax, Hmin, w2t, w1t, T, l1;
         double sras, sAuto, sWindows, sWheel, sLights;
-        double B0, B1, B2, B3, Y;
         double newFd, Td;
-        double vt ,t , fd, f1t, f2t;
+        double t , fd;
         double S0, S1, S2, S3;
-        double eps, k, v0, v1t, rWheel, fWheel, fForWheel, tForWheel, l1, vOtkl, c, angleZenit, angleAzimut, T, l;
+        double eps, k, v0, rWheel, fWheel, fForWheel, tForWheel, vOtkl, c, angleZenit, angleAzimut, l;
         double aAuto, bAuto, aWindow, bWindow , rLights, kProtect, nProtect, sProtect, lSProtect, lHProtect, hProtect, EPR;
 
-        uint numsamples = 44100;
-        ushort numchannels = 2;
-        ushort samplelength = 1; // in bytes
-        uint samplerate = 44100;
 
         private void checkBox2_CheckedChanged(object sender, EventArgs e)
         {
-            textBox1.Text = Convert.ToString(1.5);
-            textBox2.Text = Convert.ToString(1.4);
+            textBox1.Text = Convert.ToString(1.694);
+            textBox2.Text = Convert.ToString(1.784);
             textBox3.Text = Convert.ToString(0.5);
             textBox4.Text = Convert.ToString(1.2);
-            textBox5.Text = Convert.ToString(0.17);
-            textBox6.Text = Convert.ToString(44100);
+            textBox5.Text = Convert.ToString(0.175);
+            textBox6.Text = Convert.ToString(8000);
             textBox7.Text = Convert.ToString(50);
-            textBox8.Text = Convert.ToString(0.015);
-            textBox9.Text = Convert.ToString(0.01);
+            textBox8.Text = Convert.ToString(0.03);
+            textBox9.Text = Convert.ToString(0.01); 
             textBox10.Text = Convert.ToString(0.05);
-            textBox11.Text = Convert.ToString(0.004);
+            textBox11.Text = Convert.ToString(0.02);
             textBox12.Text = Convert.ToString(0.33);
             textBox13.Text = Convert.ToString(20);
-            textBox14.Text = Convert.ToString(3);
+            textBox14.Text = Convert.ToString(11);
             textBox15.Text = Convert.ToString(0.001);
             textBox16.Text = Convert.ToString(20);
             textBox18.Text = Convert.ToString(5000000000);
@@ -60,9 +43,6 @@ namespace TestApp
         public Form1()
         {
             InitializeComponent();
-
-            // var reader = new MediaFoundationReader("abc.mp3");
-            // WaveFileWriter.CreateWaveFile("abc.wav", reader);
 
             // l лямбда
             // подсказки
@@ -87,7 +67,6 @@ namespace TestApp
             help.SetToolTip(this.label15, "Частота вращения колес");
             help.SetToolTip(this.label16, "Я даж хз что тут");
             help.SetToolTip(this.label17, "Угол по зениту"); // альфа
-            help.SetToolTip(this.label18, "Угол по азимуту (по дефолту Пи)"); // бета
             help.SetToolTip(this.label21, "Несущая частота");
 
             // дефолт значения
@@ -98,7 +77,7 @@ namespace TestApp
             t = 93.5;
             angleAzimut = Math.PI; // угол по азимуту бета
             angleZenit = 20;
-            sras = 100; // что это блин вообще
+            sras = 100;
 
             // вычисление всяких констант
             k = Math.Pow(((Math.Sqrt(eps) - 1) / (Math.Sqrt(eps) + 1)), 2); // good
@@ -126,22 +105,17 @@ namespace TestApp
 
             double Y(double t) => B0(t)+B1(t)+B2(t)+B3(t);
 
-            //vt = v0 + vOtkl * (Math.Sin(2 * (Math.PI / nProtect)) * kProtect + fWheel); // good
-            //v1t = vt + v0 * Math.Cos(2 * (Math.PI / tForWheel) * t); // good
+
             S0 = abS(aAuto, bAuto); // good 
             S1 = abS(aWindow, bWindow); // good
             S2 = abS2(sProtect, lSProtect, lHProtect, hProtect); // good
             S3 = abS3(); // good
             EPR = S0 + S1 + S2 + S3;
             fd = 2 * v0 / c * f0; // good 
-            //f1t = fd + 2 * vt / c * f0; // good
-            //f2t = fd + 2 * v1t / c * f0; // good
+
             w1t = Simpson(f1t, 0 , t, 1000); // f1(t) dt
             w2t = Simpson(f2t, 0, t, 1000); // f2(t) dt
-            //S0 = 0.057;
-            //S1 = 7.514e10-6;
-            //S2 = 1.283;
-            //S3 = 1.983e10-7;
+
             sAuto = S0 / sras; 
             sWindows = S1 / sras; 
             sWheel = S2 / sras;  
@@ -150,7 +124,7 @@ namespace TestApp
             Hmax = 0;
             Hmin = 0;
 
-            for (int i = 0; i < 500000; i++)
+            for (int i = 0; i < Number; i++)
             {
                 Hn[i] = Y(Td * i);
                 if (Hn[i] > Hmax)
@@ -159,10 +133,10 @@ namespace TestApp
                 }
             }
 
-            for (int i = 0; i < 500000; i++)
+            for (int i = 0; i < Number; i++)
             {
                 // Hwav[i] = (int)(((Hn[i]- Hmin) / (Hmax - Hmin)) * 255)*100;
-                 Hwav[i] = Convert.ToInt16((Hn[i]/Hmax)*30000);
+                 Hwav[i] = Convert.ToInt16((Hn[i]/Hmax)*6000);
             }
 
             // рисование графиков
@@ -191,36 +165,33 @@ namespace TestApp
             BinaryWriter wr = new BinaryWriter(fi);
 
             wr.Write(0x46464952); // riff
-            wr.Write(0x000F4266); // chunk size
+            wr.Write(0x0007876A); // chunk size *** 0x000F4266
             wr.Write(0x45564157); // wave
             wr.Write(0x20746D66); // fmt 
             wr.Write(0x00000012); // subchunksize
-            wr.Write(0x00010001); // audioformat
-            wr.Write(0x0000AC44); // Channels
-            wr.Write(0x00015888); // Sample rate
-            wr.Write(0x00100002); // Average bytes per second
-            wr.Write(0x61640000); // da
-            wr.Write(0x42406174); // ta 42 и 0F
-            wr.Write(0x0000000F);
+            wr.Write(0x00020001); // audioformat каналы 0x00010001
+            wr.Write(0x00001F40); // fd 0x0000AC44
+            wr.Write(0x00007D00); // Sample rate 0x00015888
+            wr.Write(0x00100004); // Average bytes per second 0x00100002
+            wr.Write(0x61660000); // extra
+            wr.Write(0x00047463); // extra
+            wr.Write(0xE1CE0000); // extra
+            wr.Write(0x61640001); // da
+            wr.Write(0x87386174); // ta 42 и 0F 0x42406174
+            wr.Write(0x01540007); // 0x0000000F
+           // wr.Write(0x01580D30);
             //wr.Write(0x07F903FD);
 
 
-            for (int i = 0; i < 500000; i+=1)
+            for (int i = 0; i < Number; i+=1)
                {
                  wr.Write(Hwav[i]);
             }
 
-         label7.Text = "GJ";
+         label7.Text = "All right";
             
         }
 
-        private void pictureBox1_Click(object sender, EventArgs e)
-        {
-            PictureBox pb1 = new PictureBox();
-            pb1.ImageLocation = "../car.jpg";
-            pb1.SizeMode = PictureBoxSizeMode.AutoSize;
-            this.Controls.Add(pb1);
-        }
         private void textBox1_TextChanged(object sender, EventArgs e)
         {
             aAuto = Convert.ToDouble(textBox1.Text);
@@ -287,10 +258,6 @@ namespace TestApp
         private void textBox16_TextChanged(object sender, EventArgs e)
         {
             angleZenit = Convert.ToDouble(textBox16.Text);
-        }
-        private void textBox17_TextChanged(object sender, EventArgs e)
-        {
-            angleAzimut = Convert.ToDouble(textBox17.Text);
         }
         private void textBox18_TextChanged(object sender, EventArgs e)
         {
