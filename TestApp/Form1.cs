@@ -7,9 +7,9 @@ namespace TestApp
     public partial class Form1 : Form
     {
         Int64 f0;
-        int Number = 500000;
-        double[] Hn = new double[500000];
-        Int16[] Hwav = new Int16[500000];
+        int Number = 200000;
+        double[] Hn = new double[200000];
+        Int16[] Hwav = new Int16[200000];
         double Hmax, Hmin, w2t, w1t, T, l1;
         double sras, sAuto, sWindows, sWheel, sLights;
         double newFd, Td;
@@ -52,8 +52,8 @@ namespace TestApp
             help.ReshowDelay = 50;
             help.ShowAlways = true;
 
-            help.SetToolTip(this.label1, "Длина кузова авто");
-            help.SetToolTip(this.label2, "Ширина кузова авто");
+            help.SetToolTip(this.label1, "Высота авто");
+            help.SetToolTip(this.label2, "Ширина авто");
             help.SetToolTip(this.label3, "Длина лобового стекла");
             help.SetToolTip(this.label4, "Высота лобового стекла");
             help.SetToolTip(this.label5, "Радиус кривизны фар");
@@ -62,10 +62,9 @@ namespace TestApp
             help.SetToolTip(this.label10, "Ширина выступа протектора");
             help.SetToolTip(this.label11, "Ширина углубления протектора");
             help.SetToolTip(this.label12, "Высота протектора резины");
-            help.SetToolTip(this.label13, "Расстояние от центра колеса до крепления"); // нафига, хз 
+            help.SetToolTip(this.label13, "Расстояние от центра колеса до крепления");
             help.SetToolTip(this.label14, "Скорость движения U0");
             help.SetToolTip(this.label15, "Частота вращения колес");
-            help.SetToolTip(this.label16, "Я даж хз что тут");
             help.SetToolTip(this.label17, "Угол по зениту"); // альфа
             help.SetToolTip(this.label21, "Несущая частота");
 
@@ -74,10 +73,10 @@ namespace TestApp
             kProtect = 1;
             eps = 0.99; // епселон, константа
             c = 300000000;
-            t = 93.5;
+            t = 20;
             angleAzimut = Math.PI; // угол по азимуту бета
-            angleZenit = 20;
-            sras = 100;
+            angleZenit = 20; 
+            sras = 100; // расстояние от авто до цели
 
             // вычисление всяких констант
             k = Math.Pow(((Math.Sqrt(eps) - 1) / (Math.Sqrt(eps) + 1)), 2); // good
@@ -179,8 +178,6 @@ namespace TestApp
             wr.Write(0x61640001); // da
             wr.Write(0x87386174); // ta 42 и 0F 0x42406174
             wr.Write(0x01540007); // 0x0000000F
-           // wr.Write(0x01580D30);
-            //wr.Write(0x07F903FD);
 
 
             for (int i = 0; i < Number; i+=1)
@@ -292,7 +289,7 @@ namespace TestApp
             x9 = ((2 * Math.PI) / (l)) * h * Math.Sin(2 * Math.PI * (rWheel / nProtect) * kProtect * fWheel * t);
             summ3 = x7 * x8 / x9;
 
-            summS = summ1 + summ2 + summ3;
+            summS = summ1 * summ2 * summ3;
 
             //summS = (4 * Math.PI * k * eps) / (l0 * l1) * Math.Sin(((2 * Math.PI) / (l)) * l1 * Math.Sin(2 * Math.PI * (rWheel / nProtect) * kProtect * fWheel * t)) / ((2 * Math.PI) / (l)) * l1 * Math.Sin(2 * Math.PI * (rWheel / nProtect) * kProtect * fWheel * t);
             //summS += (((4 * Math.PI * k * eps) / (l0 * l2)) * (Math.Sin(((2 * Math.PI) / (l)) * l2 * Math.Sin(2 * Math.PI * (rWheel / nProtect) * kProtect * fWheel * t))) / ((2 * Math.PI) / (l)) * l2 * Math.Sin(2 * Math.PI * (rWheel / nProtect) * kProtect * fWheel * t));
